@@ -15,7 +15,8 @@ RequestUtils.getDemo(this, new MyObserver<Demo>(this) {
         });
 ```
 ####Post方法  调用
-```RequestUtils.postDemo(this, "aaa", "sss", new Observer<Response<Demo>>() {
+```
+RequestUtils.postDemo(this, "aaa", "sss", new Observer<Response<Demo>>() {
             @Override
             public void onSubscribe(Disposable d) {
                 Log.e("=========","======1=====");
