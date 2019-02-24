@@ -35,7 +35,7 @@ public interface ApiService {
      * TODO Get请求
      */
     //第一种方式：GET不带参数
-    @GET("demo1.txt")
+    @GET("retrofit.txt")
     Observable<Response<BaseResponse<Demo>>> getUser();//中间的BaseResponse 是自己根据后台数据封装的规范 可以进行修改
     @GET
     Observable<Response<Demo>> getUser(@Url String url); //正常情况   添加ResPonse可以根据Response.Code来判断错误类型

@@ -1,11 +1,9 @@
 package recycler.utils.lwb.blcs.rxjavaretrofit2;
 
+/**
+ * http://pndatsn5v.bkt.clouddn.com/rxjava_retrofit.txt
+ */
 public class Demo {
-    private String id;
-    private String appid;
-    private String name;
-    private String showtype;
-
     @Override
     public String toString() {
         return "Demo{" +
@@ -13,11 +11,13 @@ public class Demo {
                 ", appid='" + appid + '\'' +
                 ", name='" + name + '\'' +
                 ", showtype='" + showtype + '\'' +
-                ", showurl='" + showurl + '\'' +
                 '}';
     }
 
-    private String showurl;
+    private String id;
+    private String appid;
+    private String name;
+    private String showtype;
 
     public String getId() {
         return id;
@@ -51,11 +51,4 @@ public class Demo {
         this.showtype = showtype;
     }
 
-    public String getShowurl() {
-        return showurl;
-    }
-
-    public void setShowurl(String showurl) {
-        this.showurl = showurl;
-    }
 }

@@ -6,10 +6,15 @@ package recycler.utils.lwb.blcs.rxjavaretrofit2;
  */
 public class BaseResponse<T> {
 
+    /**
+     * res_code : 200
+     * err_msg : Web page does not exist
+     * demo : {"id":"1001","appid":"1021","name":"sss","showtype":"text"}
+     */
+
     private int res_code;
-    private int err_code;
     private String err_msg;
-    private T Demo;
+    private T demo;
 
     public int getRes_code() {
         return res_code;
@@ -17,14 +22,6 @@ public class BaseResponse<T> {
 
     public void setRes_code(int res_code) {
         this.res_code = res_code;
-    }
-
-    public int getErr_code() {
-        return err_code;
-    }
-
-    public void setErr_code(int err_code) {
-        this.err_code = err_code;
     }
 
     public String getErr_msg() {
@@ -36,10 +33,13 @@ public class BaseResponse<T> {
     }
 
     public T getDemo() {
-        return Demo;
+        return demo;
     }
 
-    public void setDemo(T Demo) {
-        this.Demo = Demo;
+    public void setDemo(T demo) {
+        this.demo = demo;
+    }
+
+    public static class DemoBean {
     }
 }

@@ -1,6 +1,5 @@
 package recycler.utils.lwb.blcs.rxjavaretrofit2;
 
-import com.trello.rxlifecycle2.components.RxActivity;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 import java.io.File;
