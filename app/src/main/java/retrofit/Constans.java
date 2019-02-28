@@ -7,6 +7,8 @@ public class Constans {
 
 
     public final static  String BaseUrl = "http://pndatsn5v.bkt.clouddn.com/";
-
     public final static  String retrofit = "retrofit.txt";
+    public final static  String retrofitList = "retrofit_list.txt";
+
+
 }

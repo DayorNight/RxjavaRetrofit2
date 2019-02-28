@@ -1,77 +1,114 @@
 package retrofit;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle2.components.RxActivity;
 
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import recycler.utils.lwb.blcs.rxjavaretrofit2.Demo;
-import recycler.utils.lwb.blcs.rxjavaretrofit2.MyObserver;
-import recycler.utils.lwb.blcs.rxjavaretrofit2.R;
-import recycler.utils.lwb.blcs.rxjavaretrofit2.RequestUtils;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import retrofit.Utils.LogInterceptor;
+import retrofit.Utils.MyObserver;
+import retrofit.bean.Bean;
+import retrofit.bean.Demo;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends RxAppCompatActivity {
+public class MainActivity extends RxActivity implements View.OnClickListener {
+    private static final String TAG = "MainActivity";
+    private TextView tv_retrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        get();
-        findViewById(R.id.btn_retrofit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,RetrofitActivity.class);
-                startActivity(intent);
-            }
-        });
+        setContentView(R.layout.activity_retrofit);
+        findViewById(R.id.btn_0).setOnClickListener(this);
+        findViewById(R.id.btn_1).setOnClickListener(this);
+        findViewById(R.id.btn_2).setOnClickListener(this);
+        tv_retrofit = findViewById(R.id.tv_retrofit);
+    }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_0:
+                getRetrofit();
+                break;
+            case R.id.btn_1:
+                getData();
+                break;
+            case R.id.btn_2:
+                getDatas();
+                break;
+        }
+    }
+    private void getRetrofit() {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .readTimeout(Constans.DEFAULT_TIME, TimeUnit.SECONDS)//设置读取超时时间
+                .connectTimeout(Constans.DEFAULT_TIME, TimeUnit.SECONDS)//设置请求超时时间
+                .writeTimeout(Constans.DEFAULT_TIME,TimeUnit.SECONDS)//设置写入超时时间
+                .addInterceptor(new LogInterceptor())//添加打印拦截器
+                .retryOnConnectionFailure(true)//设置出现错误进行重新连接。
+                .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .client(client)
+                .baseUrl(Constans.BaseUrl)
+                //添加GSON解析：返回数据转换成GSON类型
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        findViewById(R.id.btn_retrofit_rxjava).setOnClickListener(new View.OnClickListener() {
+        ApiUrl api = retrofit.create(ApiUrl.class);
+        Call<Bean> demo = api.getRetrofit();
+        demo.enqueue(new Callback<Bean>() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,RetrofitRxJavaActivity.class);
-                startActivity(intent);
+            public void onResponse(Call<Bean> call, Response<Bean> response) {
+                Log.e(TAG, "请求成功信息: "+response.body().toString());
+                tv_retrofit.setText(response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<Bean> call, Throwable t) {
+                Log.e(TAG, "请求失败信息: " +t.getMessage());
+                tv_retrofit.setText(t.getMessage());
             }
         });
 
     }
 
-
-    public void get() {
-        RequestUtils.getDemo(this, new MyObserver<Demo>(this) {
+    private void getDatas() {
+        RequestUtils.getDemoList(this, new MyObserver<List<Demo>>(this) {
             @Override
-            public void onSuccess(Demo result) {
-                Log.e("=========","==========="+result.toString());
+            public void onSuccess(List<Demo> result) {
+                for (Demo demo:result){
+                    Log.e(TAG, "onSuccess: "+demo.toString() );
+                }
+                tv_retrofit.setText(result.toString());
             }
             @Override
             public void onFailure(Throwable e, String errorMsg) {
-                Log.e("====code====="+e.getMessage(),"==========="+errorMsg);
+                tv_retrofit.setText(errorMsg);
             }
         });
     }
 
-    public void Post() {
-        RequestUtils.postDemo(this, "aaa", "sss", new Observer<Response<Demo>>() {
+    private void getData() {
+        RequestUtils.getDemo(this, new MyObserver<Demo>(this) {
             @Override
-            public void onSubscribe(Disposable d) {
-                Log.e("=========","======1=====");
+            public void onSuccess(Demo result) {
+                tv_retrofit.setText(result.toString());
             }
             @Override
-            public void onNext(Response<Demo> loginBeanResponse) {
-                Log.e("=========","=====2======"+loginBeanResponse.code());
-            }
-            @Override
-            public void onError(Throwable e) {
-                Log.e("=========","=====3======"+e.toString());
-            }
-            @Override
-            public void onComplete() {
-                Log.e("=========","=====4======");
+            public void onFailure(Throwable e, String errorMsg) {
+                tv_retrofit.setText(errorMsg);
             }
         });
     }
+
+
 }

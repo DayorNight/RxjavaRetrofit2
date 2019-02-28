@@ -1,10 +1,12 @@
-package recycler.utils.lwb.blcs.rxjavaretrofit2;
+package retrofit.Utils;
 
-import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
+
 import org.json.JSONException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.text.ParseException;
+import retrofit2.HttpException;
+
 /**
  * 异常处理
  */

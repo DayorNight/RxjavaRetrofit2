@@ -1,4 +1,4 @@
-package recycler.utils.lwb.blcs.rxjavaretrofit2;
+package retrofit.Utils;
 
 import android.util.Log;
 import java.io.IOException;

@@ -1,12 +1,14 @@
-package recycler.utils.lwb.blcs.rxjavaretrofit2;
+package retrofit.Utils;
 
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.Toast;
 
 import io.reactivex.disposables.Disposable;
+import retrofit.Utils.BaseObserver;
 
 /**
  * Observer加入加载框
@@ -31,6 +33,7 @@ public abstract class MyObserver<T> extends BaseObserver<T> {
     public void onSubscribe(Disposable d) {
         this.d = d;
         if (!isConnected(mContext)) {
+            Toast.makeText(mContext,"未连接网络",Toast.LENGTH_SHORT).show();
             if (d.isDisposed()) {
                 d.dispose();
             }
@@ -68,7 +71,6 @@ public abstract class MyObserver<T> extends BaseObserver<T> {
     }
     /**
      * 是否有网络连接，不管是wifi还是数据流量
-     *
      * @param context
      * @return
      */
