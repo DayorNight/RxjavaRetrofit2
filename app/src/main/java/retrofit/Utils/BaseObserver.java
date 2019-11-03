@@ -31,7 +31,6 @@ public abstract class BaseObserver<T> implements Observer<BaseResponse<T>> {
 
     @Override
     public void onSubscribe(Disposable d) {
-
     }
 
     public abstract void onSuccess(T result);

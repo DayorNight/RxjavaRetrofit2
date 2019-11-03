@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.trello.rxlifecycle2.components.RxActivity;
 
@@ -24,6 +25,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends RxActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
     private TextView tv_retrofit;
+    private MyObserver<Demo> myObserver;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +102,7 @@ public class MainActivity extends RxActivity implements View.OnClickListener {
     }
 
     private void getData() {
-        RequestUtils.getDemo(this, new MyObserver<Demo>(this) {
+        myObserver = new MyObserver<Demo>(this) {
             @Override
             public void onSuccess(Demo result) {
                 tv_retrofit.setText(result.toString());
@@ -107,8 +111,13 @@ public class MainActivity extends RxActivity implements View.OnClickListener {
             public void onFailure(Throwable e, String errorMsg) {
                 tv_retrofit.setText(errorMsg);
             }
-        });
+        };
+        RequestUtils.getDemo(this,myObserver);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        myObserver.cancleRequest();
+    }
 }

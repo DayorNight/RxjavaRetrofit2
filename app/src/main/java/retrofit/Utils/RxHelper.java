@@ -7,6 +7,10 @@ import com.trello.rxlifecycle2.components.RxActivity;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.trello.rxlifecycle2.components.support.RxFragmentActivity;
+
+import org.reactivestreams.Publisher;
+
+import io.reactivex.Flowable;
 import io.reactivex.FlowableTransformer;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -20,10 +24,13 @@ import io.reactivex.schedulers.Schedulers;
 public class RxHelper {
 
     public static <T> ObservableTransformer<T, T> observableIO2Main(final Context context) {
-        return upstream -> {
-            Observable<T> observable = upstream.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
-            return composeContext(context, observable);
+        return new ObservableTransformer<T, T>() {
+            @Override
+            public ObservableSource<T> apply(Observable<T> upstream) {
+                Observable<T> observable = upstream.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+                return composeContext(context, observable);
+            }
         };
     }
 
@@ -33,9 +40,14 @@ public class RxHelper {
     }
 
     public static <T> FlowableTransformer<T, T> flowableIO2Main() {
-        return upstream -> upstream
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return new FlowableTransformer<T, T>() {
+            @Override
+            public Publisher<T> apply(Flowable<T> upstream) {
+                return upstream
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
     }
 
     private static <T> ObservableSource<T> composeContext(Context context, Observable<T> observable) {

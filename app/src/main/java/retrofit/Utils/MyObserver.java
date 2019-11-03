@@ -85,5 +85,15 @@ public abstract class MyObserver<T> extends BaseObserver<T> {
         boolean available = info.isAvailable();
         return available;
     }
+
+    /**
+     * 取消订阅
+     */
+    public void cancleRequest(){
+        if (d!=null&&d.isDisposed()) {
+            d.dispose();
+            hidDialog();
+        }
+    }
 }
 

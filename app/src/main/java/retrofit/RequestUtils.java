@@ -7,14 +7,20 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit.Utils.BaseResponse;
 import retrofit.Utils.MyObserver;
 import retrofit.Utils.RetrofitUtils;
 import retrofit.Utils.RxHelper;
+import retrofit.bean.Bean;
 import retrofit.bean.Demo;
+import retrofit2.Call;
+import retrofit2.Retrofit;
 
 /**
  * 提交参数方式
@@ -27,8 +33,8 @@ public class RequestUtils {
      * @param observer
      */
     public static void getDemo(RxActivity context, MyObserver<Demo> observer){
-        RetrofitUtils.getApiUrl()
-                .getDemo().compose(RxHelper.observableIO2Main(context))
+        RetrofitUtils.getApiUrl().getDemo()
+                .compose(RxHelper.observableIO2Main(context))
                 .subscribe(observer);
     }
 
